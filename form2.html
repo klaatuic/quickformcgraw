@@ -171,6 +171,8 @@ form2_bot=regex [a-zA-Z] "Too many submissions"
 
 [else]
 
+[tmp form2submitted]0[tmp]
+
 [seti check_form2]
 &fatal=yes
 puzzle=regex ^[scratch answer] "You failed the puzzle!"
