@@ -1,0 +1,63 @@
+[tmp page_title]__COMPANY__ -- [L]Contact Form[/L][/tmp]
+
+[control reset=1]
+[control-set]
+	[component]product_tree[/component]
+[/control-set]
+[control-set]
+	[component][/component]
+[/control-set]
+[control-set]
+	[component]random[/component]
+	[banner][L]Random Component[/L][/banner]
+	[buttons]1[/buttons]
+	[cols]col-xs-6 col-sm-3 col-md-12[/cols]
+	[matches]5[/matches]
+	[pool]100[/pool]
+	[size]5[/size]
+	[output]right[/output]
+[/control-set]
+[control-set]
+	[component]promo[/component]
+	[promo_type]new[/promo_type]
+	[matches]3[/matches]
+	[cols]col-xs-6 col-sm-3 col-md-4 col-lg-3[/cols]
+	[banner][L]New items[/L][/banner]
+[/control-set]
+[control reset=1]
+
+@_TOP_@
+<!-- BEGIN CONTENT -->
+
+[if scratch form2submitted = ne 1]
+[email hide=1
+to="__EMAIL_SERVICE__"
+subject="Form2 submission"
+from="[value email]"
+reply="[value email]"]
+
+First Name= [value fname]
+Last Name= [value lname]
+Email= [value email]
+
+Company= [value company]
+
+Check1= [value check1]
+
+Check2= [value check2]
+
+Check3= [value check3]
+[/email]
+
+<h2>Your form was submitted successfully</h2>
+
+[else]
+
+<h2>Form already sent</h2>
+[/else]
+[/if]
+
+[tmp form2sumbitted]1[tmp]
+
+<!-- END CONTENT -->
+@_BOTTOM_@
