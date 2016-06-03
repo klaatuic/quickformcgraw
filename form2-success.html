@@ -52,14 +52,27 @@ Check3= [value check3]
 [/email]
 
 <h2>Your form was submitted successfully</h2>
-
+[tmp form2submitted]1[tmp]
 [else]
 
 <h2>Form already sent</h2>
+
+[calc]
+         foreach (qw(
+                         company
+                         email
+                        form2submitted
+         )) {
+                 $Values->{$_} = '';
+         }
+         return;
+[/calc]
+
+
 [/else]
 [/if]
 
-[tmp form2sumbitted]1[tmp]
+
 
 <!-- END CONTENT -->
 @_BOTTOM_@
