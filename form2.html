@@ -29,10 +29,10 @@
 @_TOP_@
 <!-- BEGIN CONTENT -->
 
-[comment]Simple function to block form if flood - if more than x amounts of submissions the profile is changed to fail and the form is hidden so only the error message is displayed. This is to stop bots but also hides the form if for any reason it is a human.[/comment]
-[perl]$Scratch->{form2count}++[/perl]
+[comment]Simple function to block form if flood - if more than x amounts of submissions set here and in the profile below the profile is changed to fail and the form is hidden so only the error message is displayed. This is to stop bots but also hides the form if for any reason it is a human.[/comment]
+[perl no_return=1]$Scratch->{form2count}++[/perl]
 
-[if scratch form2count > 20]
+[if scratch form2count > 100]
 <h3>You have failed this form too many times it is time to give up...</h3>
 [tmp form2_hide]hide[/tmp]
 [/if]
@@ -154,7 +154,7 @@
 </div>
 
 [comment]Set a form profile based no number of attenmpts[/comment]
-[if scratch form2count > 20] 
+[if scratch form2count > 100] 
 
 [seti check_form2]
 form2_bot=regex [a-zA-Z] "Too many submissions"
