@@ -1,0 +1,182 @@
+[tmp page_title]__COMPANY__ -- [L]Contact Form[/L][/tmp]
+
+[control reset=1]
+[control-set]
+	[component]product_tree[/component]
+[/control-set]
+[control-set]
+	[component][/component]
+[/control-set]
+[control-set]
+	[component]random[/component]
+	[banner][L]Random Component[/L][/banner]
+	[buttons]1[/buttons]
+	[cols]col-xs-6 col-sm-3 col-md-12[/cols]
+	[matches]5[/matches]
+	[pool]100[/pool]
+	[size]5[/size]
+	[output]right[/output]
+[/control-set]
+[control-set]
+	[component]promo[/component]
+	[promo_type]new[/promo_type]
+	[matches]3[/matches]
+	[cols]col-xs-6 col-sm-3 col-md-4 col-lg-3[/cols]
+	[banner][L]New items[/L][/banner]
+[/control-set]
+[control reset=1]
+
+@_TOP_@
+<!-- BEGIN CONTENT -->
+
+[comment]Simple function to block form if flood - if more than x amounts of submissions the profile is changed to fail and the form is hidden so only the error message is displayed. This is to stop bots but also hides the form if for any reason it is a human.[/comment]
+[perl]$Scratch->{form2count}++[/perl]
+
+[if scratch form2count > 20]
+<h3>You have failed this form too many times it is time to give up...</h3>
+[tmp form2_hide]hide[/tmp]
+[/if]
+
+[comment]Build the form with error messages that display. Auto tool tip appears if email does not validate. Form profile appears after the form.[/comment]
+
+<div class="col-md-10 [scratch form2_hide]">
+
+[if errors]
+<span class="error">There is a problem with one or more fields.</span>
+[/if]
+[edisplay class="unstyled alert alert-danger" keep=1 show_var=0]
+[warnings auto=1 list_class="unstyled alert alert-success"]
+
+<form action="[process]" method=post>
+<input type=hidden name=mv_session_id value="[data session id]">
+<input type=hidden name=mv_doit value=return>
+<input type=hidden name=mv_nextpage value=form2.html>
+<INPUT TYPE=hidden NAME=mv_form_profile VALUE=check_form2>
+                [form-session-id]
+
+<legend>Form 2 <small>(quick and dirty email form with simple bot check)</small></legend>
+
+<fieldset class="form-horizontal">
+<div class="form-group">
+        <label for="fname" class="col-sm-3 control-label">[error name=fname std_label="[L]First name[/L]" required=1]</label>
+        <div class="col-sm-6">
+                <input type=text name=fname id=fname value="[evalue fname]" class="form-control">
+        </div>
+</div>
+
+<div class="form-group">
+        <label for="lname" class="col-sm-3 control-label">[error name=lname std_label="[L]Last name[/L]" required=1]</label>
+        <div class="col-sm-6">
+                <input type=text name=lname id=lname value="[evalue lname]" class="form-control">
+        </div>
+</div>
+
+<div class="form-group">
+        <label for="company" class="col-sm-3 control-label">[error name=company std_label="[L]Company name[/L]" required=0]</label>
+        <div class="col-sm-6">
+                <input type=text name=company id=company value="[evalue company]" class="form-control">
+                <small class="help-block">([L]optional[/L])</small>
+        </div>
+</div>
+
+
+<div class="form-group">
+        <label for="email" class="col-sm-3 control-label">[error name=email std_label="[L]E-mail address[/L]" required=1]</label>
+        <div class="col-sm-6">
+                [if session logged_in]
+                        <input type=hidden name=email id=email value="[evalue email]" class="form-control">
+            [evalue email]
+                        <span class="help-block">(<a href="[area member/change_email]">[L]change[/L]</a>)</span>
+                [else]
+                        <input type=email name=email id=email value="[evalue email]" class="form-control" autocapitalize="off" autocorrect="off">
+                        <small class="help-block">([L]example[/L]: name@domain.com)</small>
+                [/else]
+                [/if]
+        </div>
+</div>
+
+
+<div class="form-group">
+<div class="col-sm-6">
+<legend>Checkboxes</legend>
+        <label for="check1" class="checkbox-inline">
+                <input type="checkbox" name="check1" id="check1" value="1" [checked name=check1 value=1 default=1]>
+                [value name=check1 set="" hide=1]
+                [L]Check 1[/L]
+        </label>
+
+
+        <label for="check2" class="checkbox-inline">
+                <input type="checkbox" name="check2" id="check2" value="1" [name=check2 value=1 default=1]>
+                [value name=check2 set="" hide=1]
+                [L]Check 2[/L]
+        </label>
+
+        <label for="check3" class="checkbox-inline">
+                <input type="checkbox" name="check3" id="check3" value="1" [name=check3 value=1 default=1]>
+                [value name=check3 set="" hide=1]
+                [L]Check 3[/L]
+        </label>
+        </div>
+</div>
+
+<br />
+[comment]Create a puzzle - basic math to start[/comment]
+[perl]
+         $Scratch->{random_number} = int rand(1000) + 1;
+         $Scratch->{random_number2} = int rand(10) + 1;
+        undef;
+[/perl]
+
+<div class="form-group">
+<div class="col-sm-6">
+<legend>Puzzle <small>(I'm not a robot)</small></legend>
+        </div>
+        </div>
+
+[tmp answer][calc][scratch random_number] + [scratch random_number2][/calc][/tmp]
+
+<div class="form-group">
+        <label for="puzzle" class="col-sm-3 control-label">[error name=puzzle std_label="[scratch random_number] plus [scratch random_number2] =" required=0]</label>
+        <div class="col-sm-2">
+         <input type=text name=puzzle id=puzzle value="[evalue puzzle]" class="form-control"></div>
+</div>
+
+<br /><br />
+        <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                        <button type=submit class="btn btn-primary">[L]Submit[/L]</button>
+                </div>
+        </div>
+
+</fieldset>
+</form>
+</div>
+
+[comment]Set a form profile based no number of attenmpts[/comment]
+[if scratch form2count > 20] 
+
+[seti check_form2]
+form2_bot=regex [a-zA-Z] "Too many submissions"
+&fail=form2
+[/seti]
+
+[else]
+
+[seti check_form2]
+&fatal=yes
+puzzle=regex ^[scratch answer] "You failed the puzzle!"
+fname=required What is your first name?
+lname=required What is your last name?
+&success=form2-success.html
+&fail=form2
+email=required
+[/seti]
+
+[/else]
+
+[/if]
+[tmp clear_errors][error all=1 comment="Clear errors"][/tmp]
+
+<!-- END CONTENT -->
+@_BOTTOM_@
