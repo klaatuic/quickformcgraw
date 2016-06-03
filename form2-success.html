@@ -29,7 +29,27 @@
 @_TOP_@
 <!-- BEGIN CONTENT -->
 
-[if scratch form2submitted = ne 1]
+[if type="value" term="form2submitted" op="=~" compare="sent"]
+<h2>Form already sent</h2>
+[calc]
+         foreach (qw(
+                         puzzle
+                         company
+                         educomment
+                         company
+                         email
+                        form2submitted
+         )) {
+                 $Values->{$_} = '';
+         }
+         return;
+[/calc]
+[tmp form2submitted][/tmp]
+
+[else]
+
+<h2>Form sent successfully</h2>
+
 [email hide=1
 to="__EMAIL_SERVICE__"
 subject="Form2 submission"
@@ -51,23 +71,7 @@ Check2= [value check2]
 Check3= [value check3]
 [/email]
 
-<h2>Your form was submitted successfully</h2>
-[tmp form2submitted]1[tmp]
-[else]
-
-<h2>Form already sent</h2>
-
-[calc]
-         foreach (qw(
-                         company
-                         email
-                        form2submitted
-         )) {
-                 $Values->{$_} = '';
-         }
-         return;
-[/calc]
-
+[value name=form2submitted escaped=1 set="sent" hide=1]
 
 [/else]
 [/if]
